@@ -22,6 +22,7 @@ const governmentSchemaValidation = joi.object({
         "Password must contain at least one uppercase letter and one special character.",
       "any.required": "Password is required.",
     }),
+  walletId: joi.string().required(),
 });
 
 export default governmentSchemaValidation;

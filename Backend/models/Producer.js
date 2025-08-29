@@ -31,6 +31,10 @@ let producerSchema = new mongoose.Schema({
   location: {
     type: locationSchema,
     required: true,
+  },
+  walletId: {
+    type: String,
+    required: true
   }
 });
 
