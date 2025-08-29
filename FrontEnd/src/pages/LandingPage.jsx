@@ -1,19 +1,12 @@
+import Navbar from "./Navbar";
+import AboutUs from "./AboutUs";
+
 // App.jsx
 export default function LandingPage() {
   return (
     <div className="bg-hydrogen-bg text-hydrogen-text min-h-screen font-futuristic">
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-10 py-5 bg-[#0f1411]">
-        <div className="flex items-center space-x-2">
-          <span className="font-bold text-xl text-white">
-            ⚡ HYDROGEN<span className="text-hydrogen-neon">CHAIN</span>
-          </span>
-        </div>
-        <ul className="flex space-x-8">
-          <li><a href="#" className="hover:text-hydrogen-neon">Home</a></li>
-          <li><a href="#" className="hover:text-hydrogen-neon">What's new</a></li>
-        </ul>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center px-6 py-20">
@@ -32,57 +25,7 @@ export default function LandingPage() {
       </section>
 
       {/* How Do We Work Section */}
-      {/* How Do We Work Section */}
-      <section className="px-6 py-20 bg-[#121a14]">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold">
-            How do <span className="text-hydrogen-neon">we work?</span>
-          </h2>
-          <p className="text-hydrogen-muted mt-4 max-w-2xl mx-auto">
-            Our process ensures transparency, sustainability, and innovation by
-            leveraging blockchain for green hydrogen production and trading.
-          </p>
-        </div>
-
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {/* Step 1 */}
-          <div className="flex flex-col justify-between bg-hydrogen-card p-6 rounded-xl border border-hydrogen-neon/40 shadow-[0_0_8px_#39ff14aa] hover:shadow-[0_0_12px_#39ff14cc] transition min-h-[250px]">
-            <h3 className="text-xl font-bold text-hydrogen-neon">1. Production</h3>
-            <p className="mt-3 text-hydrogen-text">
-              Green hydrogen is produced from renewable energy sources ensuring
-              sustainability.
-            </p>
-          </div>
-
-          {/* Step 2 */}
-          <div className="flex flex-col justify-between bg-hydrogen-card p-6 rounded-xl border border-hydrogen-neon/40 shadow-[0_0_8px_#39ff14aa] hover:shadow-[0_0_12px_#39ff14cc] transition min-h-[250px]">
-            <h3 className="text-xl font-bold text-hydrogen-neon">2. Verification</h3>
-            <p className="mt-3 text-hydrogen-text">
-              Every unit of hydrogen is tracked and verified using blockchain
-              to ensure transparency.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div className="flex flex-col justify-between bg-hydrogen-card p-6 rounded-xl border border-hydrogen-neon/40 shadow-[0_0_8px_#39ff14aa] hover:shadow-[0_0_12px_#39ff14cc] transition min-h-[250px]">
-            <h3 className="text-xl font-bold text-hydrogen-neon">3. Approval</h3>
-            <p className="mt-3 text-hydrogen-text">
-              Verified hydrogen goes through regulatory and quality approvals
-              before entering the market.
-            </p>
-          </div>
-
-          {/* Step 4 */}
-          <div className="flex flex-col justify-between bg-hydrogen-card p-6 rounded-xl border border-hydrogen-neon/40 shadow-[0_0_8px_#39ff14aa] hover:shadow-[0_0_12px_#39ff14cc] transition min-h-[250px]">
-            <h3 className="text-xl font-bold text-hydrogen-neon">4. Benefits</h3>
-            <p className="mt-3 text-hydrogen-text">
-              Producers, traders, and consumers gain secure trading, transparency,
-              and sustainable energy usage.
-            </p>
-          </div>
-        </div>
-      </section>
+     <AboutUs/>
 
     </div>
   );
