@@ -2,7 +2,7 @@ import React from "react";
 import { Table } from "./Table";
 import { Sidebar } from "./Sidebar";
 
-function Dashboard() {
+function History() {
   return (
     <div className="flex h-screen bg-[#]">
       {/* Sidebar */}
@@ -25,4 +25,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default History;
