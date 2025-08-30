@@ -8,7 +8,7 @@ const locationSchema = new mongoose.Schema({
   lon: {
     type: Number,
     required: true,
-  }
+  },
 });
 
 let governmentSchema = new mongoose.Schema({
@@ -34,8 +34,15 @@ let governmentSchema = new mongoose.Schema({
   },
   walletId: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
+  pendingProductions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Production",
+      default: [],
+    },
+  ],
 });
 
 const Government = mongoose.model("Government", governmentSchema);
