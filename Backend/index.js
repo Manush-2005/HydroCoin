@@ -20,7 +20,7 @@ import { mintTokens } from "./controller/MintToken.js";
 import { addProducer, loginProducer, producer } from "./controller/producer.js";
 import authMiddleware from "./middlewares/auth-middleware.js";
 import authGovMiddleware from "./middlewares/gov-middleware.js";
-import { addTrade } from "./controller/trade.js";
+import { addTrade, getAllTrades } from "./controller/trade.js";
 
 dotenv.config();
 
@@ -71,3 +71,4 @@ app.post("/mint-tokens", mintTokens);
 
 // Trade routes
 app.post("/submit-trade", addTrade);
+app.get("/trades", getAllTrades);

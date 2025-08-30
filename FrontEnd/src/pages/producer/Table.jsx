@@ -5,6 +5,7 @@ import { Search, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { useAuthContext } from "@/Context/AuthContext";
 import axios from "axios";
+import Loader from "@/components/Loader";
 
 export const Table = () => {
   const [tableData, setTableData] = useState([]);
@@ -13,6 +14,7 @@ export const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({ status: "" });
   const [activeFilter, setActiveFilter] = useState(null);
+  const [loading, setLoading] = useState(true);
   const rowsPerPage = 10;
   const { producer } = useAuthContext();
 
@@ -24,6 +26,7 @@ export const Table = () => {
       console.log(res.data.productions);
       setTableData(res.data.productions);
       setFilteredData(res.data.productions);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -118,6 +121,10 @@ export const Table = () => {
       )}
     </div>
   );
+
+  if(loading) {
+    return <Loader />;
+  }
 
   return (
     <motion.div

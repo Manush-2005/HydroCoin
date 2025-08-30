@@ -1,25 +1,29 @@
 // src/pages/MarketTable.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import QRCode from "react-qr-code";
+import axios from "axios";
+import Loader from "@/components/Loader";
 
-const initialSellers = Array.from({ length: 25 }, (_, index) => ({
-  id: uuidv4(),
-  name: `Seller_${index + 1}`,
-  price: (120 + Math.floor(Math.random() * 20)).toFixed(2), // random price between 120–140
-  quantity: Math.floor(Math.random() * 500) + 50, // random between 50–500
-}));
-
-// ✅ Purchase Modal
-function PurchaseModal({ isOpen, onClose, coinPrice }) {
+function PurchaseModal({ isOpen, onClose, coinPrice, availableCoins }) {
   const [quantity, setQuantity] = useState(1);
   const [step, setStep] = useState("input"); // input | confirm | qr
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
   const totalAmount = (coinPrice * quantity).toFixed(2);
+
+  const handleNext = () => {
+    if (quantity > availableCoins) {
+      setError(`Only ${availableCoins} coins available.`);
+      return;
+    }
+    setError("");
+    setStep("confirm");
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
@@ -30,6 +34,9 @@ function PurchaseModal({ isOpen, onClose, coinPrice }) {
         {step === "input" && (
           <>
             <p className="mb-2">1 HydroCoin Price: ₹{coinPrice}</p>
+            <p className="mb-2 text-sm text-gray-400">
+              Available: {availableCoins} coins
+            </p>
             <label className="block mb-2 text-gray-300">Enter Quantity:</label>
             <input
               type="number"
@@ -38,6 +45,7 @@ function PurchaseModal({ isOpen, onClose, coinPrice }) {
               onChange={(e) => setQuantity(Number(e.target.value))}
               className="w-full p-2 rounded-lg bg-[#0a0f0d] border border-gray-600 text-white"
             />
+            {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={onClose}
@@ -46,7 +54,7 @@ function PurchaseModal({ isOpen, onClose, coinPrice }) {
                 Cancel
               </button>
               <button
-                onClick={() => setStep("confirm")}
+                onClick={handleNext}
                 className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-400 text-black font-semibold"
               >
                 Next
@@ -61,7 +69,8 @@ function PurchaseModal({ isOpen, onClose, coinPrice }) {
             <p className="text-lg">
               You are buying{" "}
               <span className="font-bold text-green-400">{quantity}</span> coins
-              for <span className="font-bold text-green-400">₹{totalAmount}</span>
+              for{" "}
+              <span className="font-bold text-green-400">₹{totalAmount}</span>
             </p>
             <div className="flex justify-end gap-3 mt-6">
               <button
@@ -106,15 +115,35 @@ function PurchaseModal({ isOpen, onClose, coinPrice }) {
 }
 
 export const MarketTable = () => {
-  const [tableData] = useState(initialSellers);
+  const [tableData, setTableData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedPrice, setSelectedPrice] = useState(null); // for modal
+  const [loading, setLoading] = useState(true);
 
   const rowsPerPage = 8;
   const totalPages = Math.ceil(tableData.length / rowsPerPage);
   const startIndex = (currentPage - 1) * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const currentData = tableData.slice(startIndex, endIndex);
+
+  async function fetchAllTrades() {
+    try {
+      const res = await axios.get(`http://localhost:8000/trades`);
+      setTableData(res.data.trades);
+      console.log(res.data.trades);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllTrades();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -136,10 +165,10 @@ export const MarketTable = () => {
                   Seller
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Price (₹)
+                  Price Of One HydroCoin(₹)
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Quantity (HC)
+                  Available Coins
                 </th>
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Action
@@ -147,7 +176,7 @@ export const MarketTable = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700">
-              {currentData.map((seller) => (
+              {tableData.map((seller) => (
                 <motion.tr
                   key={seller.id}
                   initial={{ opacity: 0 }}
@@ -155,17 +184,22 @@ export const MarketTable = () => {
                   transition={{ duration: 0.3 }}
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                    {seller.name}
+                    {seller.producer_name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">
-                    ₹{seller.price}
+                    ₹{seller.prize_of_coin}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-semibold">
-                    {seller.quantity}
+                    {seller.coins_to_sell}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-center">
                     <button
-                      onClick={() => setSelectedPrice(seller.price)}
+                      onClick={() =>
+                        setSelectedPrice({
+                          price: seller.prize_of_coin,
+                          coins: seller.coins_to_sell,
+                        })
+                      }
                       className="px-3 py-1 bg-green-500 text-black rounded-lg hover:bg-green-400"
                     >
                       Purchase
@@ -215,11 +249,11 @@ export const MarketTable = () => {
         </div>
       </motion.div>
 
-      {/* ✅ Purchase Modal */}
       <PurchaseModal
         isOpen={!!selectedPrice}
         onClose={() => setSelectedPrice(null)}
-        coinPrice={selectedPrice}
+        coinPrice={selectedPrice?.price}
+        availableCoins={selectedPrice?.coins}
       />
     </>
   );

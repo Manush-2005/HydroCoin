@@ -10,7 +10,6 @@ export const addTrade = async (req, res) => {
 
   let trade = new Trade(req.body);
 
-
   trade
     .save()
     .then(async () => {
@@ -22,4 +21,14 @@ export const addTrade = async (req, res) => {
       console.log(err);
       res.send("Error Occurred !!!");
     });
+};
+
+export const getAllTrades = async (req, res) => {
+  try {
+    let trades = await Trade.find({});
+    return res.status(200).json({ message: "success", trades });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal Server error" });
+  }
 };
