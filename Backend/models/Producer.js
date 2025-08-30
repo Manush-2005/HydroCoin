@@ -41,6 +41,11 @@ const producerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ["Producer", "Government"],
+    default: "Producer",
+  },
 });
 
 //Secure the password with bcrypt
@@ -74,7 +79,7 @@ producerSchema.methods.generateToken = async function () {
       {
         userId: this._id.toString(),
         email: this.email,
-        // role: this.role,
+        role: this.role,
       },
       process.env.JWT_SECRET_KEY,
       {
