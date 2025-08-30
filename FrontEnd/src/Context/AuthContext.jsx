@@ -9,7 +9,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [producer, setProducer] = useState(""); // Initialize with null to indicate no user initially
 
-  const isLoggedIn = !!token;
+  const isLoggedInAsPro = !!token;
 
   const authorizationToken = `Bearer ${token}`;
   console.log("token", authorizationToken);
@@ -67,7 +67,7 @@ const AuthProvider = ({ children }) => {
       value={{
         producer,
         token,
-        isLoggedIn,
+        isLoggedInAsPro,
         authorizationToken,
         storeTokenInLS,
         loading,

@@ -11,7 +11,7 @@ const AuthGovProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [government, setGovernment] = useState(""); // Initialize with null to indicate no user initially
 
-  const isLoggedIn = !!token;
+  const isLoggedInAsGov = !!token;
 
   const authorizationToken = `Bearer ${token}`;
   console.log("token", authorizationToken);
@@ -23,20 +23,20 @@ const AuthGovProvider = ({ children }) => {
   };
 
   // Logout function
-  //   const userLogout = () => {
-  //     localStorage.removeItem("govhydrozen");
-  //     setToken(null);
-  //     if (token == null) {
-  //       toast.success("Logout Successfully");
-  //     }
-  //     setGovernment(""); // Clear the user data on logout
-  //   };
+  const userLogoutAsGov = () => {
+    localStorage.removeItem("govhydrozen");
+    setToken(null);
+    if (token == null) {
+      toast.success("Logout Successfully");
+    }
+    setGovernment(""); // Clear the user data on logout
+  };
 
   const userAuthentication = async () => {
     if (!token) return; // Skip if no token is available
     try {
       setLoading(true); // Set loading to true while fetching user data
-      const res = await axios.get("http://localhost:8000/producer", {
+      const res = await axios.get("http://localhost:8000/government", {
         headers: {
           Authorization: authorizationToken,
         },
@@ -44,10 +44,10 @@ const AuthGovProvider = ({ children }) => {
       const governmentInfo = res.data;
       setLoading(false); // Set loading to false after fetching user data
       setGovernment(governmentInfo.governmentData); // Update government state
-      console.log("government data:", governmentInfo.governmentData);
+      // console.log("government data:", governmentInfo.governmentData);
     } catch (error) {
       console.error("Can't fetch government data:", error);
-      //   userLogout(); // Logout if authentication fails
+      userLogoutAsGov(); // Logout if authentication fails
     }
   };
 
@@ -69,11 +69,11 @@ const AuthGovProvider = ({ children }) => {
       value={{
         government,
         token,
-        isLoggedIn,
+        isLoggedInAsGov,
         authorizationToken,
         storeTokenGovInLS,
         loading,
-        // userLogout,
+        userLogoutAsGov,
       }}
     >
       {children}

@@ -11,12 +11,14 @@ import {
 } from "./ui/menubar";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
+import { useAuthGovContext } from "@/Context/GovContext";
+import is from "zod/v4/locales/is.cjs";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { producer, isLoggedInAsPro } = useAuthContext();
-  const { government, isLoggedInAsGov } = useAuthContext();
-  console.log(producer);
+  const { government, isLoggedInAsGov } = useAuthGovContext();
+  // console.log(producer);
   console.log(government);
 
   return (
@@ -45,18 +47,19 @@ const Navbar = () => {
               About
             </Link>
 
-            {isLoggedInAsGov ? (
+            {isLoggedInAsGov || isLoggedInAsPro ? (
               <Menubar className="h-[3.25rem]">
                 <MenubarMenu className="bg-gray-500">
                   <MenubarTrigger className="!p-0">
                     <Avatar className="w-10 h-10 duration-300 cursor-pointer tsmransition-all ring-1 ring-white hover:ring-2 md:w-12 md:h-12">
                       <AvatarImage
-                        src={producer?.profileImage}
+                        src={producer?.profileImage || government?.profileImage}
                         alt="profile"
                         className="object-cover w-full h-full rounded-full"
                       />
                       <AvatarFallback className="text-xl text-green-500 bg-green-200">
-                        {producer?.name?.charAt(0)}
+                        {producer?.name?.charAt(0) ||
+                          government?.name?.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                   </MenubarTrigger>
@@ -64,7 +67,7 @@ const Navbar = () => {
                     <div className="px-4 py-2 text-center">
                       <p className="text-sm text-black">Hello 👋</p>
                       <p className="font-bold text-green-600 ">
-                        {producer?.name}
+                        {producer?.name || government?.name}
                       </p>
                     </div>
                     <MenubarSeparator className="my-2" />
@@ -126,7 +129,7 @@ const Navbar = () => {
             About
           </Link>
 
-          {isLoggedInAsGov ? (
+          {isLoggedInAsGov || isLoggedInAsPro ? (
             <button
               onClick={() => {
                 onLogout();
