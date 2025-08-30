@@ -20,7 +20,6 @@ export default function LandingPage() {
         </button>
       </section>
 
-      {/* How Do We Work Section */}
      <AboutUs/>
      <Guidance />
 
