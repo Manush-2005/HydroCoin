@@ -12,7 +12,7 @@ const SIDEBAR_ITEMS = [
   { name: "History", icon: NotebookTabs, color: "#00ff9d", href: "/producer/history" },
   { name: "Trends", icon: TrendingUp, color: "#1e00ffff", href: "/producer/trading/dashboard" },
   { name: "Trading", icon: History, color: "#ff00d0ff", href: "/producer/trading/trade" },
-  { name: "Logout", icon: LogOut, color: "#ff0233", href: "/login" },
+  { name: "Logout", icon: LogOut, color: "#ff0233", href: "/logout" },
 
 ];
 

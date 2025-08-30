@@ -3,16 +3,19 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
+import { useAuthGovContext } from "@/Context/GovContext";
+import { Check, X } from "lucide-react";
 
 const PendingRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("producer_wallet_id");
+  const { government } = useAuthGovContext();
 
   async function fetchPendingRequests() {
     try {
       const res = await axios.get(
-        `http://localhost:8000/gov/68b23f2fbdc017bbae3150e6/pending-productions`
+        `http://localhost:8000/gov/${government._id}/pending-productions`
       );
       setPendingRequests(res.data.productions);
     } catch (err) {
@@ -22,8 +25,18 @@ const PendingRequests = () => {
 
   async function approveRequest(id) {
     try {
+      let res = await axios.get(
+        `http://localhost:8000/gov/${government._id}/pro/${id}/approve`
+      );
+      setPendingRequests(res.data.productions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function rejectRequest(id) {
+    try {
       const res = await axios.get(
-        `http://localhost:8000/gov/68b23f2fbdc017bbae3150e6/pro/${id}/approve`
+        `http://localhost:8000/gov/${government._id}/pro/${id}/reject`
       );
       setPendingRequests(res.data.productions);
     } catch (err) {
@@ -38,7 +51,10 @@ const PendingRequests = () => {
   // Filter and sort data
   const filteredRequests = pendingRequests
     .filter((req) =>
-      req[sortField]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      req[sortField]
+        ?.toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
       if (a[sortField] < b[sortField]) return -1;
@@ -79,7 +95,6 @@ const PendingRequests = () => {
                 <th className="p-3">Wallet ID</th>
                 <th className="p-3">Quantity</th>
                 <th className="p-3">Date</th>
-                <th className="p-3">Time</th>
                 <th className="p-3">Resource</th>
                 <th className="p-3 text-center">Action</th>
               </tr>
@@ -95,11 +110,22 @@ const PendingRequests = () => {
                       <td className="p-3">{req.producer_wallet_id}</td>
                       <td className="p-3">{req.quantity} kWh</td>
                       <td className="p-3">{req.date_time.split("T")[0]}</td>
-                      <td className="p-3">{req.date_time.split("T")[1]}</td>
                       <td className="p-3">{req.renewable_resource}</td>
-                      <td className="p-3 text-center">
-                        <Button onClick={() => approveRequest(req._id)} className="bg-green-600 hover:bg-green-500 text-white rounded-xl px-4 py-2">
-                          Approve
+                      <td className="p-3 text-center space-x-3">
+                        <Button
+                          onClick={() => approveRequest(req._id)}
+                          className="bg-green-600 hover:bg-green-500 text-white rounded-full p-2"
+                          size="icon"
+                        >
+                          <Check className="h-5 w-5" />
+                        </Button>
+
+                        <Button
+                          onClick={() => rejectRequest(req._id)}
+                          className="bg-red-600 hover:bg-red-500 text-white rounded-full p-2"
+                          size="icon"
+                        >
+                          <X className="h-5 w-5" />
                         </Button>
                       </td>
                     </tr>

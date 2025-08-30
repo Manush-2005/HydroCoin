@@ -196,10 +196,10 @@ export const Table = () => {
                 case "approved":
                   statusColor = "text-green-400";
                   break;
-                case "coin_provided":
+                case "coins_granted":
                   statusColor = "text-purple-400";
                   break;
-                case "cancelled":
+                case "rejected":
                   statusColor = "text-red-500";
                   break;
               }

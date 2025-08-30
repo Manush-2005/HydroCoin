@@ -23,8 +23,8 @@ const Navbar = () => {
 
   return (
     <nav className="bg-[#0f1411] shadow-md">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-10">
-        <div className="flex items-center justify-between py-5">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-10 bg-[#0f1411]">
+        <div className="flex items-center justify-between py-5 bg-[#0f1411]">
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold text-white">
@@ -48,10 +48,10 @@ const Navbar = () => {
             </Link>
 
             {isLoggedInAsGov || isLoggedInAsPro ? (
-              <Menubar className="h-[3.25rem]">
+              <Menubar className="h-[3.25rem] border-0 bg-[#0f1411]">
                 <MenubarMenu className="bg-gray-500">
                   <MenubarTrigger className="!p-0">
-                    <Avatar className="w-10 h-10 duration-300 cursor-pointer tsmransition-all ring-1 ring-white hover:ring-2 md:w-12 md:h-12">
+                    <Avatar className="w-10 h-10 duration-300 cursor-pointer tsmransition-all ring-1 ring-white md:w-12 md:h-12">
                       <AvatarImage
                         src={producer?.profileImage || government?.profileImage}
                         alt="profile"

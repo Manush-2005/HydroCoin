@@ -11,6 +11,7 @@ function PurchaseModal({ isOpen, onClose, coinPrice, availableCoins }) {
   const [quantity, setQuantity] = useState(1);
   const [step, setStep] = useState("input"); // input | confirm | qr
   const [error, setError] = useState("");
+  const [transactionId, setTransactionId] = useState(null);
 
   if (!isOpen) return null;
 
@@ -24,6 +25,22 @@ function PurchaseModal({ isOpen, onClose, coinPrice, availableCoins }) {
     setError("");
     setStep("confirm");
   };
+
+  const handleConfirm = () => {
+    // generate unique transaction id on confirm
+    const id = uuidv4();
+    setTransactionId(id);
+    setStep("qr");
+  };
+
+  const qrValue = transactionId
+    ? JSON.stringify({
+        transactionId,
+        amount: totalAmount,
+        quantity,
+        coinPrice,
+      })
+    : "";
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
@@ -80,7 +97,7 @@ function PurchaseModal({ isOpen, onClose, coinPrice, availableCoins }) {
                 Back
               </button>
               <button
-                onClick={() => setStep("qr")}
+                onClick={handleConfirm}
                 className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-400 text-black font-semibold"
               >
                 Confirm Purchase
@@ -97,11 +114,14 @@ function PurchaseModal({ isOpen, onClose, coinPrice, availableCoins }) {
               <span className="font-bold text-green-400">₹{totalAmount}</span>
             </p>
             <div className="flex justify-center">
-              <QRCode value={`pay-hydrocoin:${totalAmount}`} size={150} />
+              <QRCode value={qrValue} size={150} />
             </div>
+            <p className="mt-3 text-xs text-gray-400">
+              Transaction ID: {transactionId}
+            </p>
             <div className="flex justify-center mt-6">
               <button
-                onClick={onClose}
+                onClick={() => {onClose(); setStep("input");}}
                 className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600"
               >
                 Close
@@ -165,6 +185,9 @@ export const MarketTable = () => {
                   Seller
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Seller Wallet ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Price Of One HydroCoin(₹)
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -185,6 +208,9 @@ export const MarketTable = () => {
                 >
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
                     {seller.producer_name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+                    {seller.producer_wallet_id}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">
                     ₹{seller.prize_of_coin}

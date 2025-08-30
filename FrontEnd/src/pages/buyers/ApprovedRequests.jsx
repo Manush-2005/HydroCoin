@@ -3,27 +3,18 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
+import { useAuthGovContext } from "@/Context/GovContext";
 
 const ApprovedRequests = () => {
   const [approvedRequests, setApprovedRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("producer_wallet_id");
+  const { government } = useAuthGovContext();
 
   async function fetchApprovedRequests() {
     try {
       const res = await axios.get(
-        `http://localhost:8000/gov/68b23f2fbdc017bbae3150e6/approved-productions`
-      );
-      setApprovedRequests(res.data.productions);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function approveRequest(id) {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/gov/68b23f2fbdc017bbae3150e6/pro/${id}/approve`
+        `http://localhost:8000/gov/${government._id}/approved-productions`
       );
       setApprovedRequests(res.data.productions);
     } catch (err) {
