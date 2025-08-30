@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { addProducer } from "./controller/producer.js";
 import { addGovernment } from "./controller/government.js";
+import { addProduction } from "./controller/production.js";
 
 dotenv.config();
 
@@ -25,5 +26,9 @@ app.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
+// Sign Up Routes
 app.post("/signup/producer", addProducer);
 app.post("/signup/government", addGovernment);
+
+// Production Of H2 Routes
+app.post("/submit-production", addProduction);
