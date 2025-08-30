@@ -8,7 +8,15 @@ import {
   Legend,
 } from "recharts";
 
-const COLORS = ["#39ff14", "#00ff9d", "#8aff80", "#10B981", "#F59E0B"];
+const COLORS = [
+  "#FFB6C1", 
+  "#ADD8E6", 
+  "#90EE90", 
+  "#FFFACD", 
+  "#FFDAB9", 
+  "#E6E6FA", 
+  "#F5DEB3", 
+];
 
 export const MonthlyLiquidH2SalesChart = ({ data }) => {
   return (
@@ -43,15 +51,17 @@ export const MonthlyLiquidH2SalesChart = ({ data }) => {
                   strokeWidth={2}
                 />
               ))}
+
             </Pie>
             <Tooltip
               contentStyle={{
                 backgroundColor: "#0a0f0d",
-                border: "1px solid #39ff14",
+                border: "1px solid #fff",
                 borderRadius: "0.5rem",
               }}
-              itemStyle={{ color: "#e6ffe6" }}
+              itemStyle={{ color: "#fff", fontWeight: "bold" }}
             />
+
             <Legend
               wrapperStyle={{
                 color: "#8aff80",

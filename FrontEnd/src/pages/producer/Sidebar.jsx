@@ -7,8 +7,8 @@ import { Menu } from "lucide-react";
 // import { app } from "../../config/firebase";
 
 const SIDEBAR_ITEMS = [
-  { name: "Dashboard", icon: BarChart2, color: "6366f1", href: "/" },
-  { name: "History", icon: NotebookTabs, color: "#00ff9d", href: "/history" },
+  { name: "Dashboard", icon: BarChart2, color: "6366f1", href: "/producer/dashboard" },
+  { name: "History", icon: NotebookTabs, color: "#00ff9d", href: "/producer/history" },
   { name: "Logout", icon: LogOut, color: "#ff0233", href: "/login" },
 ];
 

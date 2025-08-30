@@ -18,27 +18,48 @@ export const GreenHydrogenChart = ({ data }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
     >
-      <h2 className="text-xl font-semibold text-[#39ff14] mb-4">Monthly Green Hydrogen Production</h2>
+      <h2 className="text-xl font-semibold text-[#e6ffe6] mb-4">
+        Monthly Green Hydrogen Production
+      </h2>
       <div style={{ width: "100%", height: 300 }}>
         <ResponsiveContainer>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1f2920" />
-            <XAxis dataKey="month" stroke="#8aff80" />
-            <YAxis stroke="#8aff80" />
+            <XAxis dataKey="month" stroke="#ADD8E6" /> {/* light pink */}
+            <YAxis stroke="#ADD8E6" /> {/* light blue */}
             <Tooltip
               contentStyle={{
-                backgroundColor: "rgba(18, 26, 20, 0.9)",
-                borderColor: "#39ff14",
+                backgroundColor: "rgba(255, 255, 255, 0.95)",
+                border: "1px solid #FFB6C1",
+                borderRadius: "0.5rem",
               }}
-              itemStyle={{ color: "#39ff14" }}
+              itemStyle={{ color: "#4CC9F0", fontWeight: "bold" }}
             />
-            <Legend wrapperStyle={{ color: "#8aff80" }} />
+            <Legend wrapperStyle={{ color: "#F5DEB3", fontWeight: "bold" }} />
+            
+            {/* Multiple lines */}
             <Line
               type="monotone"
               dataKey="production"
-              stroke="#00ff9d"
+              stroke="#FFB6C1" // pink
               strokeWidth={3}
-              dot={{ r: 4, stroke: "#39ff14", strokeWidth: 2, fill: "#00ff9d" }}
+              dot={{ r: 4, stroke: "#FFB6C1", strokeWidth: 2, fill: "#FFB6C1" }}
+              activeDot={{ r: 6 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="export"
+              stroke="#ADD8E6" // blue
+              strokeWidth={3}
+              dot={{ r: 4, stroke: "#ADD8E6", strokeWidth: 2, fill: "#ADD8E6" }}
+              activeDot={{ r: 6 }}
+            />
+            <Line
+              type="monotone"
+              dataKey="consumption"
+              stroke="#90EE90" // green
+              strokeWidth={3}
+              dot={{ r: 4, stroke: "#90EE90", strokeWidth: 2, fill: "#90EE90" }}
               activeDot={{ r: 6 }}
             />
           </LineChart>

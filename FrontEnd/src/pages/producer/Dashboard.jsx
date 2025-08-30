@@ -6,11 +6,11 @@ import { LineChart } from "recharts";
 import monthlyProductionData from "@/Data/monthlyproduction";
 import Form from "./Form";
 import { MonthlyLiquidH2SalesChart } from "./PieChart";
-import salesData from "@/Data/monthlySell";
+import salesData from "../../Data/monthlySell";
 import { GreenHydrogenChart } from "./lineChart";
 
 function Dashboard() {
-  const [showForm, setShowForm] = new useState(false);
+  const [showForm, setShowForm] = useState(false);
   return (
     <div className="flex h-screen bg-[#]">
       {/* Sidebar */}
@@ -42,7 +42,7 @@ function Dashboard() {
         <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8 bg-[#121a14]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <GreenHydrogenChart data={monthlyProductionData} />
-            <MonthlyLiquidH2SalesChart data={salesData} />
+            <MonthlyLiquidH2SalesChart data={salesData} className="z-10 w-full max-w-md mx-auto"/>
           </div>
         </main>
       </div>
