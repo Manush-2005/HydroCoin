@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuthContext } from "@/Context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function Form({ onClose }) {
   const { producer } = useAuthContext();
-  console.log("Producer:", typeof(producer), producer);
 
   const [governments, setGovernments] = useState([]);
   const [form, setForm] = useState({
@@ -18,7 +18,19 @@ export default function Form({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    try {
+      let res = await axios.post(`http://localhost:8000/submit-production`, {
+        producer_wallet_id: producer.walletId,
+        receiver_wallet_id: form.buyerName,
+        date_time: form.date,
+        renewable_resource: form.renewable_resource,
+        quantity: form.quantity
+      });
+      toast.success("Production successfully submitted");
+    }
+    catch(err) {
+      console.log(err);
+    }
     setForm({
       producerName: "",
       buyerName: "",
@@ -66,7 +78,7 @@ export default function Form({ onClose }) {
             className="w-full px-4 py-2 rounded-lg border border-[#00ff9d] bg-black bg-opacity-20 text-[#e6ffe6] focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all
               focus:text-white"
             value={form.buyerName}
-            onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
+            onChange={(e) => setForm({ ...form, buyerName: e.target.value})}
             required
           >
             <option value="" disabled>
@@ -75,7 +87,7 @@ export default function Form({ onClose }) {
             {governments.map((buyer) => (
               <option
                 key={buyer._id}
-                value={buyer._id}
+                value={buyer.walletId}
                 className="bg-black text-[#e6ffe6] hover:bg-[#39ff14] hover:text-black"
               >
                 {buyer.name}

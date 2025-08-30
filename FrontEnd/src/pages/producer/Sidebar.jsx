@@ -1,4 +1,4 @@
-import { BarChart2, NotebookTabs, LogOut } from "lucide-react";
+import { BarChart2, NotebookTabs, LogOut, TrendingUp, History } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,6 +10,8 @@ const SIDEBAR_ITEMS = [
 
   { name: "Dashboard", icon: BarChart2, color: "6366f1", href: "/producer/dashboard" },
   { name: "History", icon: NotebookTabs, color: "#00ff9d", href: "/producer/history" },
+  { name: "Trends", icon: TrendingUp, color: "#1e00ffff", href: "/producer/trading/dashboard" },
+  { name: "Trading", icon: History, color: "#ff00d0ff", href: "/producer/trading/trade" },
   { name: "Logout", icon: LogOut, color: "#ff0233", href: "/login" },
 
 ];

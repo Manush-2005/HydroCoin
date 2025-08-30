@@ -5,8 +5,6 @@ import { Sidebar } from "./Sidebar";
 function History() {
   return (
     <div className="flex h-screen bg-[#]">
-      {/* Sidebar */}
-      <Sidebar />
 
       {/* Main content */}
       <div className="flex-1 h-full overflow-auto relative z-10 bg-[#121a14]">

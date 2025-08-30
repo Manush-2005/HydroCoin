@@ -4,8 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import {
   addProduction,
-  getAllApprovedProductionsOfGovernment,
   getAllProductionsOfGovernment,
+  getAllApprovedProductionsOfGovernment,
   getProductionOfUser,
 } from "./controller/production.js";
 import {
@@ -16,11 +16,6 @@ import {
   loginGovernment,
   rejectProduction,
 } from "./controller/government.js";
-import {
-  addProduction,
-  getAllApprovedProductionsOfGovernment,
-  getAllProductionsOfGovernment,
-} from "./controller/production.js";
 import { mintTokens } from "./controller/MintToken.js";
 import { addProducer, loginProducer, producer } from "./controller/producer.js";
 import authMiddleware from "./middlewares/auth-middleware.js";
