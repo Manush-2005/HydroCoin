@@ -1,16 +1,22 @@
-import { Routes, Route  } from "react-router-dom"
-import LandingPage from "./pages/LandingPage"
-import { Toaster } from "react-hot-toast"
-function App() {
+import { Routes, Route } from "react-router-dom";
 
+import { Toaster } from "react-hot-toast";
+
+import Register from "./Auth/Register";
+import Home from "./pages/Home";
+import About from "./pages/About";
+
+function App() {
   return (
     <>
-    <Toaster/>
+      <Toaster />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route exact path="/register" element={<Register />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

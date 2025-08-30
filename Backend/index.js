@@ -41,6 +41,10 @@ app.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the HydroCoin API");
+});
+
 // Sign Up Routes
 app.post("/signup/producer", addProducer);
 app.post("/signup/government", addGovernment);
