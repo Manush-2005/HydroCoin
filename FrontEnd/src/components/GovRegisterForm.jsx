@@ -25,9 +25,11 @@ import { ethers } from "ethers";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { LocationPicker } from "./RegisterForm";
+import { useNavigate } from "react-router-dom";
 
 export default function GovRegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -85,6 +87,7 @@ export default function GovRegisterForm() {
       console.log("[register] Success:", data);
       toast.success("Government Registered successfully");
       form.reset();
+      navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
       console.log(error);
