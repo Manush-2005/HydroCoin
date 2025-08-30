@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast"
 import LayOut from "./pages/LayOut"
 import Register from "./Auth/Register";
 import Home from "./pages/Home";
-import About from "./pages/About";
+import About from "./pages/AboutUs";
 // import ProducerDashboard from "./pages/producer/Form";
 import Form from "./pages/producer/Form";
 import BuyerDashboard from "./pages/buyers/Dashboard";

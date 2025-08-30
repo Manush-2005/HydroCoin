@@ -1,66 +1,126 @@
-// src/pages/BuyerDashboard.jsx
-import React, { useState } from "react";
-import { requests } from "@/Data/Request";
+import React, { useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import axios from "axios";
 
-export default function BuyerDashboard() {
-  const [localRequests, setLocalRequests] = useState(requests);
+const BuyerDashboard = () => {
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortField, setSortField] = useState("producer_wallet_id");
 
-  const handleApprove = (id) => {
-    const updated = localRequests.map((r) =>
-      r.id === id ? { ...r, status: "Approved" } : r
-    );
-    setLocalRequests(updated);
-  };
+  async function fetchPendingRequests() {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/gov/68b23f2fbdc017bbae3150e6/pending-productions`
+      );
+      setPendingRequests(res.data.productions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function approveRequest(id) {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/gov/68b23f2fbdc017bbae3150e6/pro/${id}/approve`
+      );
+      setPendingRequests(res.data.productions);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchPendingRequests();
+  }, []);
+
+  // Filter and sort data
+  const filteredRequests = pendingRequests
+    .filter((req) =>
+      req[sortField]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (a[sortField] < b[sortField]) return -1;
+      if (a[sortField] > b[sortField]) return 1;
+      return 0;
+    });
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Buyer Dashboard</h1>
+    <div className="min-h-screen bg-gray-950 text-gray-200 p-8 space-y-6">
+      <h2 className="text-2xl font-bold text-green-400">Pending Requests</h2>
 
-      <h2 className="text-xl font-semibold mb-4">Pending Requests</h2>
-      <table className="w-full text-left border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Request ID</th>
-            <th className="p-2">Producer Name</th>
-            <th className="p-2">Quantity</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Resource</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {localRequests
-            .filter((r) => r.status === "Pending")
-            .map((r) => (
-              <tr key={r.id} className="border-t">
-                <td className="p-2">{r.id}</td>
-                <td className="p-2">{r.producerName}</td>
-                <td className="p-2">{r.quantity}</td>
-                <td className="p-2">{r.date}</td>
-                <td className="p-2">{r.renewable_resource}</td>
-                <td className="p-2">
-                  <button
-                    onClick={() => handleApprove(r.id)}
-                    className="bg-green-600 text-white px-3 py-1 rounded"
-                  >
-                    Approve
-                  </button>
-                </td>
+      {/* Search and Sort Controls */}
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <Input
+          placeholder={`Search by ${sortField}`}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="bg-gray-900 border border-green-400/30 text-gray-100 placeholder-gray-400"
+        />
+        <select
+          value={sortField}
+          onChange={(e) => setSortField(e.target.value)}
+          className="bg-gray-900 border border-green-400/30 text-gray-100 rounded-lg px-3 py-2"
+        >
+          <option value="producer_wallet_id">Wallet ID</option>
+          <option value="quantity">Quantity</option>
+          <option value="date_time">Date</option>
+          <option value="renewable_resource">Resource</option>
+        </select>
+      </div>
+
+      {/* Table */}
+      <Card className="bg-gray-900 border border-green-400/30 shadow-lg rounded-2xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-800 text-green-300">
+                <th className="p-3">Wallet ID</th>
+                <th className="p-3">Quantity</th>
+                <th className="p-3">Date</th>
+                <th className="p-3">Time</th>
+                <th className="p-3">Resource</th>
+                <th className="p-3 text-center">Action</th>
               </tr>
-            ))}
-        </tbody>
-      </table>
-
-      <h2 className="text-xl font-semibold mt-8 mb-4">Approved Requests</h2>
-      <ul className="list-disc ml-6">
-        {localRequests
-          .filter((r) => r.status === "Approved")
-          .map((r) => (
-            <li key={r.id}>
-              {r.producerName} - {r.quantity} ({r.date}, {r.renewable_resource})
-            </li>
-          ))}
-      </ul>
+            </thead>
+            <tbody className="text-gray-200">
+              {filteredRequests.length > 0 ? (
+                filteredRequests.map((req) => {
+                  return (
+                    <tr
+                      key={req._id}
+                      className="border-b border-green-400/20 hover:bg-gray-800 transition"
+                    >
+                      <td className="p-3">{req.producer_wallet_id}</td>
+                      <td className="p-3">{req.quantity} kWh</td>
+                      <td className="p-3">{req.date_time.split("T")[0]}</td>
+                      <td className="p-3">{req.date_time.split("T")[1]}</td>
+                      <td className="p-3">{req.renewable_resource}</td>
+                      <td className="p-3 text-center">
+                        <Button onClick={() => approveRequest(req._id)} className="bg-green-600 hover:bg-green-500 text-white rounded-xl px-4 py-2">
+                          Approve
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="p-4 text-center text-gray-400 italic"
+                  >
+                    No pending requests
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
     </div>
   );
-}
+};
+
+export default BuyerDashboard;

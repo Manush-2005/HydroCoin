@@ -43,6 +43,13 @@ let governmentSchema = new mongoose.Schema({
       default: [],
     },
   ],
+  approvedProductions: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Production",
+      default: [],
+    },
+  ],
 });
 
 const Government = mongoose.model("Government", governmentSchema);
