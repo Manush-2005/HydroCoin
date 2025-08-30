@@ -17,9 +17,11 @@ import "leaflet/dist/leaflet.css";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -74,6 +76,7 @@ export default function RegisterForm() {
       console.log("[register] Success:", data);
       toast.success("User Registered successfully");
       form.reset();
+      navigate("/login");
     } catch (error) {
       toast.error(error.response.data.message);
       console.log(error);

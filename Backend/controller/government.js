@@ -78,3 +78,12 @@ export const rejectProduction = async(req, res) => {
     return res.status(200).json({ message: "success", productions : government.pendingProductions});
 }
 
+export const getAllGovernmentEntities = async(req, res) => {
+    try {
+        let data = await Government.find({});
+        return res.status(200).json({ message: "success", governments : data});
+    }
+    catch(err) {
+        return res.send("Error Occurred !!!");
+    }
+}

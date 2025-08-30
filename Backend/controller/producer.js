@@ -1,4 +1,5 @@
 import Producer from "../models/Producer.js";
+import Production from "../models/Production.js";
 import producerSchemaValidation from "../validation/producerValidator.js";
 
 //Register Producer

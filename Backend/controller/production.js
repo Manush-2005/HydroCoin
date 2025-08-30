@@ -55,3 +55,16 @@ export const getAllApprovedProductionsOfGovernment = async(req, res) => {
     gov = await gov.populate('approvedProductions');
     return res.status(200).json({productions: gov.approvedProductions});
 }
+
+export const getProductionOfUser = async(req, res) => {
+  try {
+    let data = await Production.find({});
+    console.log(req.body.wallet_id);
+    console.log("data ",data);
+    let productions = data.filter(d => d.producer_wallet_id == req.body.wallet_id);
+    console.log("productions ",productions);
+    return res.status(200).json({ productions });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error." });
+  }
+}
