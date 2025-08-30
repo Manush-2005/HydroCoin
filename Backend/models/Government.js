@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken"; // ✅ Add this
+
+dotenv.config();
 
 const locationSchema = new mongoose.Schema({
   lat: {
@@ -13,19 +18,19 @@ const locationSchema = new mongoose.Schema({
 
 let governmentSchema = new mongoose.Schema({
   email: {
-    type: "string",
+    type: String,
     required: true,
   },
   password: {
-    type: "string",
+    type: String,
     required: true,
   },
   name: {
-    type: "string",
+    type: String,
     required: true,
   },
   address: {
-    type: "string",
+    type: String,
     required: true,
   },
   location: {
@@ -36,6 +41,13 @@ let governmentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  role: {
+    type: String,
+    enum: ["central", "state", "local"],
+    default: "local",
+  },
+
   pendingProductions: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -51,6 +63,49 @@ let governmentSchema = new mongoose.Schema({
     },
   ],
 });
+
+//Secure the password with bcrypt
+governmentSchema.pre("save", async function (next) {
+  const user = this;
+
+  if (!user.isModified("password")) {
+    next();
+  }
+
+  try {
+    const saltRound = await bcrypt.genSalt(10);
+    const hash_password = await bcrypt.hash(user.password, saltRound);
+    user.password = hash_password;
+  } catch (error) {
+    next(error);
+  }
+});
+
+//compare the password
+
+governmentSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
+//create json web token
+
+governmentSchema.methods.generateToken = async function () {
+  try {
+    return jwt.sign(
+      {
+        userId: this._id.toString(),
+        email: this.email,
+        role: this.role,
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const Government = mongoose.model("Government", governmentSchema);
 export default Government;

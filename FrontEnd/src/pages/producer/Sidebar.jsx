@@ -7,26 +7,16 @@ import { Menu } from "lucide-react";
 // import { app } from "../../config/firebase";
 
 const SIDEBAR_ITEMS = [
+
   { name: "Dashboard", icon: BarChart2, color: "6366f1", href: "/producer/dashboard" },
   { name: "History", icon: NotebookTabs, color: "#00ff9d", href: "/producer/history" },
   { name: "Logout", icon: LogOut, color: "#ff0233", href: "/login" },
+
 ];
 
 export const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    const auth = getAuth(app);
-    signOut(auth)
-      .then(() => {
-        console.log("User logged out");
-        navigate("/login");
-      })
-      .catch((error) => {
-        console.error("Error during logout:", error.message);
-      });
-  };
 
   return (
     <motion.div
@@ -50,7 +40,6 @@ export const Sidebar = () => {
             <Link key={item.href} to={item.href}>
               <motion.div
                 className="flex items-center p-4 text-sm font-medium rounded-lg hover:bg-[#121a14] transition-colors mb-2 cursor-pointer"
-                onClick={item.name === "Logout" ? handleLogout : undefined}
               >
                 <item.icon
                   size={20}

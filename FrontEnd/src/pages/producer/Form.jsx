@@ -1,25 +1,45 @@
 // src/pages/ProducerDashboard.jsx
-import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { requests } from "@/Data/Request";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useAuthContext } from "@/Context/AuthContext";
 
 export default function Form({ onClose }) {
-  const [localRequests, setLocalRequests] = useState(requests);
+  const { producer } = useAuthContext();
+  console.log("Producer:", typeof(producer), producer);
+
+  const [governments, setGovernments] = useState([]);
   const [form, setForm] = useState({
     producerName: "",
     buyerName: "",
     quantity: "",
     date: "",
-    renewable_resource: ""
+    renewable_resource: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newRequest = { id: uuidv4(), ...form, status: "Pending" };
-    requests.push(newRequest); // Mock global array
-    setLocalRequests([...localRequests, newRequest]);
-    setForm({ producerName: "", buyerName: "", quantity: "", date: "", renewable_resource: "" });
+    console.log(form);
+    setForm({
+      producerName: "",
+      buyerName: "",
+      quantity: "",
+      date: "",
+      renewable_resource: "",
+    });
   };
+
+  async function fetchAllGovernments() {
+    try {
+      let res = await axios.get("http://localhost:8000/governments");
+      setGovernments(res.data.governments);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    fetchAllGovernments();
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
@@ -49,18 +69,19 @@ export default function Form({ onClose }) {
             onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
             required
           >
-            <option value="" disabled>Select Buyer</option>
-            {["Green Energy Corp", "Solar Solutions", "EcoPower Ltd", "HydroTech", "BlueWave Energy"].map((buyer) => (
+            <option value="" disabled>
+              Select Buyer
+            </option>
+            {governments.map((buyer) => (
               <option
-                key={buyer}
-                value={buyer}
+                key={buyer._id}
+                value={buyer._id}
                 className="bg-black text-[#e6ffe6] hover:bg-[#39ff14] hover:text-black"
               >
-                {buyer}
+                {buyer.name}
               </option>
             ))}
           </select>
-
 
           {/* Quantity Input */}
           <input
@@ -76,7 +97,9 @@ export default function Form({ onClose }) {
             className="w-full px-4 py-2 rounded-lg border border-[#00ff9d] bg-black bg-opacity-20 text-[#e6ffe6] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all"
             placeholder="Renewable Resource"
             value={form.renewable_resource}
-            onChange={(e) => setForm({ ...form, renewable_resource: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, renewable_resource: e.target.value })
+            }
             required
           />
 
@@ -97,9 +120,7 @@ export default function Form({ onClose }) {
             Submit Request
           </button>
         </form>
-
       </div>
     </div>
-
   );
 }

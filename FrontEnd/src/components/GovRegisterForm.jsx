@@ -11,17 +11,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Eye, EyeOff } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { LocationPicker } from "./RegisterForm";
 
-export default function RegisterForm() {
+export default function GovRegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -29,6 +35,7 @@ export default function RegisterForm() {
       email: "",
       password: "",
       address: "",
+      role: "",
       location: { lat: "", lon: "" },
       walletId: "",
     },
@@ -57,7 +64,8 @@ export default function RegisterForm() {
   };
 
   const onSubmit = async (values) => {
-    // Convert lat/lon into number
+    console.log("values:", values);
+
     const formattedData = {
       ...values,
       location: {
@@ -68,17 +76,17 @@ export default function RegisterForm() {
 
     console.log("[register]", formattedData);
     try {
-      const response = await axios.post("http://localhost:8000/signup/producer", {
-        ...formattedData
-      });
+      const response = await axios.post(
+        "http://localhost:8000/signup/government",
+        formattedData
+      );
 
       const data = response.data;
       console.log("[register] Success:", data);
-      toast.success("User Registered successfully");
+      toast.success("Government Registered successfully");
       form.reset();
-      navigate("/login");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Registration failed");
       console.log(error);
     }
   };
@@ -100,7 +108,7 @@ export default function RegisterForm() {
                 <FormLabel className="text-gray-300">Name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Company/Producer Name"
+                    placeholder="Government Department Name"
                     {...field}
                     className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                   />
@@ -135,6 +143,31 @@ export default function RegisterForm() {
             )}
           />
         </div>
+
+        {/* Role Select */}
+        <FormField
+          control={form.control}
+          name="role"
+          rules={{ required: "Role is required" }}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-gray-300">Role</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent className="text-white bg-gray-800 border-gray-700">
+                  <SelectItem value="central">Central</SelectItem>
+                  <SelectItem value="state">State</SelectItem>
+                  <SelectItem value="local">Local</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Password + Wallet ID */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
@@ -217,7 +250,7 @@ export default function RegisterForm() {
               <FormLabel className="text-gray-300">Address</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Ranoli, Vadodara"
+                  placeholder="Department address"
                   {...field}
                   className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                 />
@@ -227,8 +260,9 @@ export default function RegisterForm() {
           )}
         />
 
+        {/* Location Picker */}
         <FormLabel className="text-gray-300">Location</FormLabel>
-        <LocationPicker form={form}/>
+        <LocationPicker form={form} />
 
         {/* Submit button */}
         <Button
@@ -246,89 +280,5 @@ export default function RegisterForm() {
         </p>
       </form>
     </Form>
-  );
-}
-
-function LocationMarker({ onChange, initialPosition }) {
-  const [position, setPosition] = useState(initialPosition);
-
-  useMapEvents({
-    click(e) {
-      setPosition(e.latlng);
-      onChange(e.latlng);
-    },
-  });
-
-  return (
-    <Marker
-      position={position}
-      draggable
-      eventHandlers={{
-        dragend: (e) => {
-          const newPos = e.target.getLatLng();
-          setPosition(newPos);
-          onChange(newPos);
-        },
-      }}
-    />
-  );
-}
-
-export function LocationPicker({ form }) {
-  const [currentLocation, setCurrentLocation] = useState({
-    lat: 23.19,
-    lon: 72.628,
-  });
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const { latitude, longitude } = pos.coords;
-        setCurrentLocation({ lat: latitude, lon: longitude });
-        form.setValue("location.lat", latitude);
-        form.setValue("location.lon", longitude);
-      });
-    }
-  }, [form]);
-
-  const lat = form.watch("location.lat");
-  const lon = form.watch("location.lon");
-
-  return (
-    <div className="space-y-3">
-      <div className="w-full h-64 overflow-hidden border border-gray-600 rounded-lg">
-        <MapContainer
-          center={[currentLocation.lat, currentLocation.lon]}
-          zoom={13}
-          className="w-full h-full"
-          style={{ backgroundColor: "#1f2937" }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-          />
-          <LocationMarker
-            initialPosition={{
-              lat: currentLocation.lat,
-              lng: currentLocation.lon,
-            }}
-            onChange={(pos) => {
-              form.setValue("location.lat", pos.lat);
-              form.setValue("location.lon", pos.lng);
-            }}
-          />
-        </MapContainer>
-      </div>
-
-      {/* Show current coordinates */}
-      <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-300 bg-gray-700 rounded-md">
-        <span>
-          Latitude: <span className="text-green-400">{lat}</span>
-        </span>
-        <span>
-          Longitude: <span className="text-green-400">{lon}</span>
-        </span>
-      </div>
-    </div>
   );
 }

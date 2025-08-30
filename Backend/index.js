@@ -2,11 +2,29 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import { addGovernment, approveProduction, rejectProduction } from "./controller/government.js";
-import { addProduction, getAllApprovedProductionsOfGovernment, getAllProductionsOfGovernment } from "./controller/production.js";
+import {
+  addProduction,
+  getAllApprovedProductionsOfGovernment,
+  getAllProductionsOfGovernment,
+  getProductionOfUser,
+} from "./controller/production.js";
+import {
+  addGovernment,
+  approveProduction,
+  getAllGovernmentEntities,
+  government,
+  loginGovernment,
+  rejectProduction,
+} from "./controller/government.js";
+import {
+  addProduction,
+  getAllApprovedProductionsOfGovernment,
+  getAllProductionsOfGovernment,
+} from "./controller/production.js";
 import { mintTokens } from "./controller/MintToken.js";
 import { addProducer, loginProducer, producer } from "./controller/producer.js";
 import authMiddleware from "./middlewares/auth-middleware.js";
+import authGovMiddleware from "./middlewares/gov-middleware.js";
 
 dotenv.config();
 
@@ -16,24 +34,6 @@ app.use(express.json());
 app.use(cors());
 
 const PORT = process.env.PORT || 8000;
-function validateObjectId(paramName = "id") {
-  return (req, res, next) => {
-    const id =
-      req.params[paramName] || req.body[paramName] || req.query[paramName];
-
-    if (!id) {
-      return res.status(400).json({ error: `${paramName} is required` });
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res
-        .status(400)
-        .json({ error: `${paramName} is not a valid ObjectId` });
-    }
-
-    next();
-  };
-}
 
 app.listen(PORT, async () => {
   try {
@@ -54,8 +54,11 @@ app.get("/", (req, res) => {
 app.post("/signup/producer", addProducer);
 app.post("/login/producer", loginProducer);
 app.get("/producer", authMiddleware, producer);
+app.post("/producer/productions", getProductionOfUser);
 
 app.post("/signup/government", addGovernment);
+app.post("/login/government", loginGovernment);
+app.get("/government", authGovMiddleware, government);
 
 // Production Of H2 Routes
 app.post("/submit-production", addProduction);
@@ -65,7 +68,7 @@ app.get("/gov/:id/pending-productions", getAllProductionsOfGovernment);
 app.get("/gov/:id/approved-productions", getAllApprovedProductionsOfGovernment);
 app.get("/gov/:govId/pro/:proId/approve", approveProduction);
 app.get("/gov/:govId/pro/:proId/reject", rejectProduction);
-
+app.get("/governments", getAllGovernmentEntities);
 
 // Mint new token route
 app.post("/mint-tokens", mintTokens);

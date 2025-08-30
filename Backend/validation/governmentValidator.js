@@ -23,6 +23,7 @@ const governmentSchemaValidation = joi.object({
       "any.required": "Password is required.",
     }),
   walletId: joi.string().required(),
+  role: joi.string().valid("central", "state", "local").required(),
 });
 
 export default governmentSchemaValidation;

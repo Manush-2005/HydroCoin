@@ -12,7 +12,7 @@ function History() {
       <div className="flex-1 h-full overflow-auto relative z-10 bg-[#121a14]">
         <header className="bg-[#0a0f0d] bg-opacity-50 backdrop-blur-md shadow-lg border-b border-[#0a0f0d] py-4 px-4 sm:px-6 lg:px-8">
           <h1 className="text-2xl font-semibold text-[#e6ffe6]">
-            Producer History
+            Producer Dashboard
           </h1>
         </header>
 
