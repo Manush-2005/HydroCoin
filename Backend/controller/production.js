@@ -2,6 +2,7 @@ import Government from "../models/Government.js";
 import Producer from "../models/Producer.js";
 import Production from "../models/Production.js";
 import productionValidationSchema from "../validation/productionValidator.js";
+import mongoose from "mongoose";
 
 export const addProduction = async(req, res) => {
     let { error } = productionValidationSchema.validate(req.body);
@@ -23,4 +24,19 @@ export const addProduction = async(req, res) => {
         console.log(err);
         res.send("Error Occurred !!! , Couldn't Add new production");
     });
+}
+
+export const getAllProductionsOfGovernment = async(req, res) => {
+    let {id} = req.params; 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: `Invalid id` });
+    }
+    let gov = await Government.findById(id);
+
+    if(!gov) {
+        return res.status(400).json({ message: "Id does not exist"});
+    }
+
+    gov = await gov.populate('pendingProductions');
+    return res.status(200).json({productions: gov.pendingProductions});
 }
