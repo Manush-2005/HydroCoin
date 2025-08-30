@@ -3,14 +3,14 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { requests } from "@/Data/Request";
 
-export default function Form() {
+export default function Form({ onClose }) {
   const [localRequests, setLocalRequests] = useState(requests);
   const [form, setForm] = useState({
     producerName: "",
-    buyerName:"",
-    quantity:"",
+    buyerName: "",
+    quantity: "",
     date: "",
-    renewable_resource:""
+    renewable_resource: ""
   });
 
   const handleSubmit = (e) => {
@@ -18,83 +18,88 @@ export default function Form() {
     const newRequest = { id: uuidv4(), ...form, status: "Pending" };
     requests.push(newRequest); // Mock global array
     setLocalRequests([...localRequests, newRequest]);
-    setForm({ producerName: "", producerOrgId: "", buyerOrgId: "", documentUrl: "" });
+    setForm({ producerName: "", buyerName: "", quantity: "", date: "", renewable_resource: "" });
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Producer Dashboard</h1>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+      <div className="w-full max-w-2xl p-6 bg-[#0a0f0d] rounded-2xl shadow-2xl border border-[#121a14]">
+        {/* Close Button */}
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={onClose}
+            className="px-3 py-1 text-sm text-[#00ff9d] border border-[#00ff9d] rounded-lg hover:bg-[#39ff14] hover:text-black transition-colors"
+          >
+            Close
+          </button>
+        </div>
 
-      {/* Create Request Form */}
-      <form onSubmit={handleSubmit} className="bg-gray-100 p-6 rounded-xl mb-8 space-y-4">
-        <input
-          className="border p-2 w-full rounded"
-          placeholder="Producer Name"
-          value={form.producerName}
-          onChange={(e) => setForm({ ...form, producerName: e.target.value })}
-          required
-        />
-        
-        <input
-          className="border p-2 w-full rounded"
-          placeholder="Buyer Name"
-          value={form.buyerName}
-          onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
-          required
-        />
-        <input
-          className="border p-2 w-full rounded"
-          placeholder="Quantity"
-          value={form.quantity}
-          onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-          required
-        />
-        <input
-            type="Date"
-          className="border p-2 w-full rounded text-slate-400"
-          placeholder="Date"
-          value={form.date}
-          onChange={(e) => setForm({ ...form, date: e.target.value })}
-          required
-        />
-        <input
-          className="border p-2 w-full rounded"
-          placeholder="Renewable-Resource"
-          value={form.renewable_resource}
-          onChange={(e) => setForm({ ...form, renewable_resource: e.target.value })}
-          required
-        />
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-          Submit Request
-        </button>
-      </form>
+        {/* Form Header */}
+        <h1 className="text-2xl font-bold text-[#00ff9d] mb-6 text-center">
+          Create New Request
+        </h1>
 
-      {/* Requests Table */}
-      <h2 className="text-xl font-semibold mb-4">Your Requests</h2>
-      <table className="w-full text-left border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Request ID</th>
-            <th className="p-2">Buyer Org</th>
-            <th className="p-2">Document</th>
-            <th className="p-2">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {localRequests.map((r) => (
-            <tr key={r.id} className="border-t">
-              <td className="p-2">{r.id}</td>
-              <td className="p-2">{r.buyerOrgId}</td>
-              <td className="p-2">
-                <a href={r.documentUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-                  View
-                </a>
-              </td>
-              <td className="p-2 font-semibold">{r.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Buyer Name Dropdown */}
+          <select
+            className="w-full px-4 py-2 rounded-lg border border-[#00ff9d] bg-black bg-opacity-20 text-[#e6ffe6] focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all
+              focus:text-white"
+            value={form.buyerName}
+            onChange={(e) => setForm({ ...form, buyerName: e.target.value })}
+            required
+          >
+            <option value="" disabled>Select Buyer</option>
+            {["Green Energy Corp", "Solar Solutions", "EcoPower Ltd", "HydroTech", "BlueWave Energy"].map((buyer) => (
+              <option
+                key={buyer}
+                value={buyer}
+                className="bg-black text-[#e6ffe6] hover:bg-[#39ff14] hover:text-black"
+              >
+                {buyer}
+              </option>
+            ))}
+          </select>
+
+
+          {/* Quantity Input */}
+          <input
+            className="w-full px-4 py-2 rounded-lg border border-[#00ff9d] bg-black bg-opacity-20 text-[#e6ffe6] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all"
+            placeholder="Quantity"
+            value={form.quantity}
+            onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+            required
+          />
+
+          {/* Renewable Resource Input */}
+          <input
+            className="w-full px-4 py-2 rounded-lg border border-[#00ff9d] bg-black bg-opacity-20 text-[#e6ffe6] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all"
+            placeholder="Renewable Resource"
+            value={form.renewable_resource}
+            onChange={(e) => setForm({ ...form, renewable_resource: e.target.value })}
+            required
+          />
+
+          {/* Date Input */}
+          <input
+            type="date"
+            className="w-full px-4 py-2 rounded-lg border border-[#00ff9d] bg-black bg-opacity-20 text-[#e6ffe6] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all"
+            value={form.date}
+            onChange={(e) => setForm({ ...form, date: e.target.value })}
+            required
+          />
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full py-2 mt-2 text-black font-semibold bg-[#00ff9d] rounded-lg hover:bg-[#39ff14] transition-colors"
+          >
+            Submit Request
+          </button>
+        </form>
+
+      </div>
     </div>
+
   );
 }

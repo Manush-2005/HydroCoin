@@ -9,6 +9,12 @@ export const addProducer = async (req, res) => {
     return res.status(403).json({ message: "Producer already exists" });
   }
 
+  producer = await Producer.findOne({walletId : req.body.walletId});
+
+  if (producer) {
+    return res.status(403).json({ message: "Wallet Id already exists" });
+  }
+
   let { error } = producerSchemaValidation.validate(req.body);
 
   if (error) {

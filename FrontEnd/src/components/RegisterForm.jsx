@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -15,6 +15,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ethers } from "ethers";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,23 +66,17 @@ export default function RegisterForm() {
 
     console.log("[register]", formattedData);
     try {
-      const response = await fetch("http://localhost:8000/signup/producer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formattedData),
+      const response = await axios.post("http://localhost:8000/signup/producer", {
+        ...formattedData
       });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Network response was not ok");
-      }
 
-      const data = await response.json();
+      const data = response.data;
       console.log("[register] Success:", data);
+      toast.success("User Registered successfully");
       form.reset();
     } catch (error) {
-      console.error("[register]", error);
+      toast.error(error.response.data.message);
+      console.log(error);
     }
   };
 
@@ -98,7 +94,7 @@ export default function RegisterForm() {
             rules={{ required: "Name is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel className="text-gray-300">Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Company/Producer Name"
@@ -122,7 +118,7 @@ export default function RegisterForm() {
             }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-gray-300">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -151,7 +147,7 @@ export default function RegisterForm() {
             }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-gray-300">Password</FormLabel>
                 <div className="relative">
                   <FormControl>
                     <Input
@@ -186,7 +182,7 @@ export default function RegisterForm() {
             rules={{ required: "Wallet ID is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Wallet ID</FormLabel>
+                <FormLabel className="text-gray-300">Wallet ID</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Connect your wallet"
@@ -215,7 +211,7 @@ export default function RegisterForm() {
           rules={{ required: "Address is required" }}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Address</FormLabel>
+              <FormLabel className="text-gray-300">Address</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Ranoli, Vadodara"
@@ -228,49 +224,8 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* Location lat + lon */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="location.lat"
-            rules={{ required: "Latitude is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Latitude</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="any"
-                    placeholder="22.3951077"
-                    {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="location.lon"
-            rules={{ required: "Longitude is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Longitude</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="any"
-                    placeholder="73.1188011"
-                    {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormLabel className="text-gray-300">Location</FormLabel>
+        <LocationPicker form={form}/>
 
         {/* Submit button */}
         <Button
