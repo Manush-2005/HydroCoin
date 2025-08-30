@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -98,7 +98,7 @@ export default function RegisterForm() {
             rules={{ required: "Name is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel className="text-gray-300">Name</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Company/Producer Name"
@@ -122,7 +122,7 @@ export default function RegisterForm() {
             }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-gray-300">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
@@ -151,7 +151,7 @@ export default function RegisterForm() {
             }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-gray-300">Password</FormLabel>
                 <div className="relative">
                   <FormControl>
                     <Input
@@ -186,7 +186,7 @@ export default function RegisterForm() {
             rules={{ required: "Wallet ID is required" }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Wallet ID</FormLabel>
+                <FormLabel className="text-gray-300">Wallet ID</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Connect your wallet"
@@ -215,7 +215,7 @@ export default function RegisterForm() {
           rules={{ required: "Address is required" }}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Address</FormLabel>
+              <FormLabel className="text-gray-300">Address</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Ranoli, Vadodara"
@@ -228,49 +228,8 @@ export default function RegisterForm() {
           )}
         />
 
-        {/* Location lat + lon */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name="location.lat"
-            rules={{ required: "Latitude is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Latitude</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="any"
-                    placeholder="22.3951077"
-                    {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="location.lon"
-            rules={{ required: "Longitude is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Longitude</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="any"
-                    placeholder="73.1188011"
-                    {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormLabel className="text-gray-300">Location</FormLabel>
+        <LocationPicker form={form}/>
 
         {/* Submit button */}
         <Button
