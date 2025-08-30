@@ -16,6 +16,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ethers } from "ethers";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,23 +66,16 @@ export default function RegisterForm() {
 
     console.log("[register]", formattedData);
     try {
-      const response = await fetch("http://localhost:8000/signup/producer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formattedData),
+      const response = await axios.post("http://localhost:8000/signup/producer", {
+        ...formattedData
       });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Network response was not ok");
-      }
 
-      const data = await response.json();
+      const data = response.data;
       console.log("[register] Success:", data);
+      toast.success("User Registered successfully");
       form.reset();
     } catch (error) {
-      toast.error("User Already exists");
+      toast.error(error.response.data.message);
       console.log(error);
     }
   };
