@@ -9,8 +9,8 @@ import Home from "./pages/Home";
 import Form from "./pages/producer/Form";
 import BuyerDashboard from "./pages/buyers/Dashboard";
 import AboutUs from "./pages/AboutUs";
-// import ProducerDashboard from "./pages/producer/Table";
-import Dashboard from "./pages/producer/History";
+import Dashboard from "./pages/producer/Dashboard";
+import History from "./pages/producer/History";
 
 function App() {
   return (
