@@ -1,9 +1,10 @@
 const salesData = [
-  { month: "Jan", sales: 120 },
-  { month: "Feb", sales: 180 },
-  { month: "Mar", sales: 90 },
-  { month: "Apr", sales: 150 },
-  { month: "May", sales: 200 },
+  { name: "January", value: 420 },
+  { name: "February", value: 310 },
+  { name: "March", value: 370 },
+  { name: "April", value: 250 },
+  { name: "May", value: 390 },
+  { name: "June", value: 280 },
 ];
 
 export default salesData;
