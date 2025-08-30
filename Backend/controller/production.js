@@ -40,3 +40,18 @@ export const getAllProductionsOfGovernment = async(req, res) => {
     gov = await gov.populate('pendingProductions');
     return res.status(200).json({productions: gov.pendingProductions});
 }
+
+export const getAllApprovedProductionsOfGovernment = async(req, res) => {
+    let {id} = req.params; 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: `Invalid id` });
+    }
+    let gov = await Government.findById(id);
+
+    if(!gov) {
+        return res.status(400).json({ message: "Id does not exist"});
+    }
+
+    gov = await gov.populate('approvedProductions');
+    return res.status(200).json({productions: gov.approvedProductions});
+}
