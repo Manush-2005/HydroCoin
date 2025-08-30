@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { addProducer } from "./controller/producer.js";
-import { addGovernment, approveProduction } from "./controller/government.js";
+import { addGovernment, approveProduction, rejectProduction } from "./controller/government.js";
 import { addProduction, getAllApprovedProductionsOfGovernment, getAllProductionsOfGovernment } from "./controller/production.js";
 import { mintTokens } from "./controller/MintToken.js";
 dotenv.config();
@@ -56,6 +56,7 @@ app.post("/submit-production", addProduction);
 app.get("/gov/:id/pending-productions", getAllProductionsOfGovernment);
 app.get("/gov/:id/approved-productions", getAllApprovedProductionsOfGovernment);
 app.get("/gov/:govId/pro/:proId/approve", approveProduction);
+app.get("/gov/:govId/pro/:proId/reject", rejectProduction);
 
 
 // Mint new token route
