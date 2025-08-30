@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { addProducer } from "./controller/producer.js";
 import { addGovernment, approveProduction } from "./controller/government.js";
-import { addProduction, getAllProductionsOfGovernment } from "./controller/production.js";
+import { addProduction, getAllApprovedProductionsOfGovernment, getAllProductionsOfGovernment } from "./controller/production.js";
 import { mintTokens } from "./controller/MintToken.js";
 dotenv.config();
 
@@ -54,6 +54,7 @@ app.post("/submit-production", addProduction);
 
 // Gov Routes
 app.get("/gov/:id/pending-productions", getAllProductionsOfGovernment);
+app.get("/gov/:id/approved-productions", getAllApprovedProductionsOfGovernment);
 app.get("/gov/:govId/pro/:proId/approve", approveProduction);
 
 

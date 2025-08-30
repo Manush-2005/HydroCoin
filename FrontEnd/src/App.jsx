@@ -7,7 +7,8 @@ import Home from "./pages/Home";
 import About from "./pages/AboutUs";
 // import ProducerDashboard from "./pages/producer/Form";
 import Form from "./pages/producer/Form";
-import BuyerDashboard from "./pages/buyers/Dashboard";
+import PendingRequests from "./pages/buyers/PendingRequests";
+import ApprovedRequests from "./pages/buyers/ApprovedRequests";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/producer/dashboard" element={<Form />} />
-        <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
+        <Route path="/buyer/approved-requests" element={<ApprovedRequests />} />
+        <Route path="/buyer/pending-requests" element={<PendingRequests />} />
       </Routes>
     </>
   );

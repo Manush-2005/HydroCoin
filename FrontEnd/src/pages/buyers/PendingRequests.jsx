@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 
-const BuyerDashboard = () => {
+const PendingRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("producer_wallet_id");
@@ -123,4 +123,4 @@ const BuyerDashboard = () => {
   );
 };
 
-export default BuyerDashboard;
+export default PendingRequests;
