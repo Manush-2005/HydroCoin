@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import { addProducer } from "./controller/producer.js";
 import { addGovernment } from "./controller/government.js";
 import { addProduction, getAllProductionsOfGovernment } from "./controller/production.js";
-
+import { mintTokens } from "./controller/MintToken.js";
 dotenv.config();
 
 const app = express();
@@ -52,3 +52,7 @@ app.post("/signup/government", addGovernment);
 // Production Of H2 Routes
 app.post("/submit-production", addProduction);
 app.get("/gov/:id/productions", getAllProductionsOfGovernment);
+
+
+// Mint new token route
+app.post("/mint-tokens", mintTokens);
