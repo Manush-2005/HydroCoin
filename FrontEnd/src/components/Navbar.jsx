@@ -1,8 +1,11 @@
+import { useAuthContext } from "@/Context/AuthContext";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { producer, isLoggedIn } = useAuthContext();
+  console.log(producer);
 
   return (
     <nav className="bg-[#0f1411] shadow-md">
@@ -30,13 +33,15 @@ const Navbar = () => {
               About
             </Link>
 
-            {false ? (
-              <button className="bg-hydrogen-neon text-[#0f1411] px-4 py-2 rounded-xl font-medium hover:bg-[#0ef29b] transition">
-                Logout
-              </button>
+            {isLoggedIn ? (
+              <Link to="/logout">
+                <button className="bg-hydrogen-neon text-[#0f1411] px-4 py-2 rounded-xl font-medium hover:bg-[#0ef29b] transition">
+                  Logout
+                </button>
+              </Link>
             ) : (
               <Link
-                to="/register"
+                to="/login"
                 className="bg-hydrogen-neon text-[#0f1411] px-4 py-2 rounded-xl font-medium hover:bg-[#0ef29b] transition"
               >
                 Login
