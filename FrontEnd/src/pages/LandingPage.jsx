@@ -1,12 +1,11 @@
 import Navbar from "./Navbar";
 import AboutUs from "./AboutUs";
+import Guidance from "./Guidance";
 
 // App.jsx
 export default function LandingPage() {
   return (
     <div className="bg-hydrogen-bg text-hydrogen-text min-h-screen font-futuristic">
-      {/* Navbar */}
-      <Navbar />
 
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center px-6 py-20">
@@ -26,6 +25,7 @@ export default function LandingPage() {
 
       {/* How Do We Work Section */}
      <AboutUs/>
+     <Guidance />
 
     </div>
   );
