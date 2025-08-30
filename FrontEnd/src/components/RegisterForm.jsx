@@ -12,6 +12,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { ethers } from "ethers";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +30,27 @@ export default function RegisterForm() {
     },
     mode: "onTouched",
   });
+
+  // 🔹 Connect MetaMask & set walletId
+  const connectWallet = async () => {
+    try {
+      if (!window.ethereum) {
+        alert("MetaMask not detected! Please install MetaMask.");
+        return;
+      }
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      const address = accounts[0];
+
+      // Update walletId field in form
+      form.setValue("walletId", address);
+
+      console.log("Connected Wallet:", address);
+    } catch (error) {
+      console.error("Wallet connection failed:", error);
+    }
+  };
 
   const onSubmit = async (values) => {
     // Convert lat/lon into number
@@ -62,7 +86,10 @@ export default function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid w-full gap-6"
+      >
         {/* Name + Email */}
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <FormField
@@ -76,7 +103,7 @@ export default function RegisterForm() {
                   <Input
                     placeholder="Company/Producer Name"
                     {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
+                    className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                   />
                 </FormControl>
                 <FormMessage />
@@ -101,7 +128,7 @@ export default function RegisterForm() {
                     type="email"
                     placeholder="you@example.com"
                     {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
+                    className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                   />
                 </FormControl>
                 <FormMessage />
@@ -130,7 +157,7 @@ export default function RegisterForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="pr-10 focus-visible:ring-green-500/40 focus-visible:border-green-500"
+                      className="pr-10 text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                       {...field}
                     />
                   </FormControl>
@@ -140,7 +167,7 @@ export default function RegisterForm() {
                       showPassword ? "Hide password" : "Show password"
                     }
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute inset-y-0 grid right-2 place-items-center text-muted-foreground hover:text-foreground"
+                    className="absolute inset-y-0 grid text-gray-400 right-2 place-items-center hover:text-white"
                   >
                     {showPassword ? (
                       <EyeOff className="size-5" />
@@ -162,15 +189,23 @@ export default function RegisterForm() {
                 <FormLabel>Wallet ID</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="1234"
+                    placeholder="Connect your wallet"
+                    readOnly
                     {...field}
-                    className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
+                    className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <Button
+            type="button"
+            onClick={connectWallet}
+            className="w-full text-black bg-green-500 shadow-md hover:bg-green-500/90 focus-visible:ring-green-500/40 hover:shadow-lg"
+          >
+            Connect Wallet
+          </Button>
         </div>
 
         {/* Address */}
@@ -185,7 +220,7 @@ export default function RegisterForm() {
                 <Input
                   placeholder="Ranoli, Vadodara"
                   {...field}
-                  className="focus-visible:ring-green-500/40 focus-visible:border-green-500"
+                  className="text-white bg-gray-700 border-gray-600 focus-visible:ring-green-500/40 focus-visible:border-green-500"
                 />
               </FormControl>
               <FormMessage />
@@ -253,5 +288,89 @@ export default function RegisterForm() {
         </p>
       </form>
     </Form>
+  );
+}
+
+function LocationMarker({ onChange, initialPosition }) {
+  const [position, setPosition] = useState(initialPosition);
+
+  useMapEvents({
+    click(e) {
+      setPosition(e.latlng);
+      onChange(e.latlng);
+    },
+  });
+
+  return (
+    <Marker
+      position={position}
+      draggable
+      eventHandlers={{
+        dragend: (e) => {
+          const newPos = e.target.getLatLng();
+          setPosition(newPos);
+          onChange(newPos);
+        },
+      }}
+    />
+  );
+}
+
+export function LocationPicker({ form }) {
+  const [currentLocation, setCurrentLocation] = useState({
+    lat: 23.19,
+    lon: 72.628,
+  });
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const { latitude, longitude } = pos.coords;
+        setCurrentLocation({ lat: latitude, lon: longitude });
+        form.setValue("location.lat", latitude);
+        form.setValue("location.lon", longitude);
+      });
+    }
+  }, [form]);
+
+  const lat = form.watch("location.lat");
+  const lon = form.watch("location.lon");
+
+  return (
+    <div className="space-y-3">
+      <div className="w-full h-64 overflow-hidden border border-gray-600 rounded-lg">
+        <MapContainer
+          center={[currentLocation.lat, currentLocation.lon]}
+          zoom={13}
+          className="w-full h-full"
+          style={{ backgroundColor: "#1f2937" }}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+          />
+          <LocationMarker
+            initialPosition={{
+              lat: currentLocation.lat,
+              lng: currentLocation.lon,
+            }}
+            onChange={(pos) => {
+              form.setValue("location.lat", pos.lat);
+              form.setValue("location.lon", pos.lng);
+            }}
+          />
+        </MapContainer>
+      </div>
+
+      {/* Show current coordinates */}
+      <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-300 bg-gray-700 rounded-md">
+        <span>
+          Latitude: <span className="text-green-400">{lat}</span>
+        </span>
+        <span>
+          Longitude: <span className="text-green-400">{lon}</span>
+        </span>
+      </div>
+    </div>
   );
 }

@@ -9,6 +9,8 @@ import Dashboard from "./pages/producer/History";
 import Form from "./pages/producer/Form";
 import PendingRequests from "./pages/buyers/PendingRequests";
 import ApprovedRequests from "./pages/buyers/ApprovedRequests";
+import Login from "./Auth/Login";
+import Logout from "./Auth/Logout";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/" element={<Home />} />
         </Route>
         <Route exact path="/register" element={<Register />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/logout" element={<Logout />} />
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs/>} />
         <Route path="/producer/dashboard" element={<Dashboard />} />
