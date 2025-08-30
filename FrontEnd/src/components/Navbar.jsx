@@ -11,7 +11,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <span className="text-xl font-bold text-white">
-              ⚡ HYDROGEN<span className="text-hydrogen-neon">CHAIN</span>
+              HYDRO<span className="text-hydrogen-neon">COIN</span>
             </span>
           </div>
 
