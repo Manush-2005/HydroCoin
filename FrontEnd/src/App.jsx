@@ -11,7 +11,7 @@ import ApprovedRequests from "./pages/buyers/ApprovedRequests";
 import Login from "./Auth/Login";
 import Logout from "./Auth/Logout";
 import PrivateRoute from "./Private/PrivateRoute";
-
+import GovRegister from "./Auth/GovRegister";
 
 function App() {
   return (
@@ -21,9 +21,14 @@ function App() {
         <Route path="/" element={<LayOut />}>
           <Route path="/" element={<Home />} />
         </Route>
-        <Route exact path="/register" element={<Register />} />
+        <Route exact path="/register/producer" element={<Register />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/logout" element={<Logout />} />
+
+        {/* gov register */}
+
+        <Route exact path="/register/government" element={<GovRegister />} />
+
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route

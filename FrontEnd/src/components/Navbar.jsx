@@ -14,8 +14,10 @@ import { Button } from "./ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { producer, isLoggedIn } = useAuthContext();
+  const { producer, isLoggedInAsPro } = useAuthContext();
+  const { government, isLoggedInAsGov } = useAuthContext();
   console.log(producer);
+  console.log(government);
 
   return (
     <nav className="bg-[#0f1411] shadow-md">
@@ -43,7 +45,7 @@ const Navbar = () => {
               About
             </Link>
 
-            {isLoggedIn ? (
+            {isLoggedInAsGov ? (
               <Menubar className="h-[3.25rem]">
                 <MenubarMenu className="bg-gray-500">
                   <MenubarTrigger className="!p-0">
@@ -124,7 +126,7 @@ const Navbar = () => {
             About
           </Link>
 
-          {isLoggedIn ? (
+          {isLoggedInAsGov ? (
             <button
               onClick={() => {
                 onLogout();
