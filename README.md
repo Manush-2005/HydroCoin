@@ -89,10 +89,10 @@ This ensures:
 
 ### 📸 Demo Flow Screens
 
-- Producer Dashboard ["./FrontEnd/src/assets/images/Producer_Dashboard.jpg"]
-- Producer History ["./FrontEnd/src/assets/images/Producer_History.jpg"]
-- Create New Request ["./FrontEnd/src/assets/images/Create_New_Request.jpg"]
-- HydroCoin Marketplace ["./FrontEnd/src/assets/images/HydroCoin_Marketplace.jpg"]
+- ![Producer Dashboard](./FrontEnd/src/assets/images/Producer_Dashboard.jpg)
+- ![Producer History](./FrontEnd/src/assets/images/Producer_History.jpg)
+- ![Create New Request](./FrontEnd/src/assets/images/Create_New_Request.jpg)
+- ![HydroCoin Marketplace](./FrontEnd/src/assets/images/HydroCoin_Marketplace.jpg)
 
 ---
 
