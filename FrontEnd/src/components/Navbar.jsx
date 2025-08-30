@@ -18,9 +18,6 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { producer, isLoggedInAsPro } = useAuthContext();
   const { government, isLoggedInAsGov } = useAuthGovContext();
-  // console.log(producer);
-  console.log(government);
-
   return (
     <nav className="bg-[#0f1411] shadow-md">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-10 bg-[#0f1411]">
@@ -76,7 +73,7 @@ const Navbar = () => {
                         My Profile
                       </MenubarItem>
                     </Link>
-                    <Link to="/producer/dashboard">
+                    <Link to={isLoggedInAsPro ? "/producer/dashboard" : "/government/pending-requests"}>
                       <MenubarItem className="transition-colors cursor-pointer hover:bg-green-100 hover:text-green-600">
                         Dashboard
                       </MenubarItem>

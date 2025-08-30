@@ -24,9 +24,6 @@ const AuthProvider = ({ children }) => {
   const userLogout = () => {
     localStorage.removeItem("hydrogen");
     setToken(null);
-    if (token == null) {
-      toast.success("Logout Successfully");
-    }
     setProducer(""); // Clear the user data on logout
   };
 

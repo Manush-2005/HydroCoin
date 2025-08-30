@@ -10,6 +10,7 @@ const PendingRequests = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("producer_wallet_id");
+  const [transactionHash, setTransactionHash] = useState(null);
   const { government } = useAuthGovContext();
 
   async function fetchPendingRequests() {
@@ -23,9 +24,15 @@ const PendingRequests = () => {
     }
   }
 
-  async function approveRequest(id) {
+  async function approveRequest(id, walletId, quantity) {
     try {
-      let res = await axios.get(
+      let res = await axios.post(`http://localhost:8000/mint-tokens`, {
+        "producer": walletId,
+        "amount" : quantity,
+        "ipfsHash" : "hgsdhwgcbkejrbkvjek"
+      });
+      setTransactionHash(res.data.transactionHash);
+      res = await axios.get(
         `http://localhost:8000/gov/${government._id}/pro/${id}/approve`
       );
       setPendingRequests(res.data.productions);
@@ -64,8 +71,8 @@ const PendingRequests = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-200 p-8 space-y-6">
-      <h2 className="text-2xl font-bold text-green-400">Pending Requests</h2>
-
+      <h2 className="text-2xl font-bold text-green-400">Pending Requests {transactionHash}</h2>
+      
       {/* Search and Sort Controls */}
       <div className="flex flex-col md:flex-row gap-4 items-center">
         <Input
@@ -113,7 +120,7 @@ const PendingRequests = () => {
                       <td className="p-3">{req.renewable_resource}</td>
                       <td className="p-3 text-center space-x-3">
                         <Button
-                          onClick={() => approveRequest(req._id)}
+                          onClick={() => approveRequest(req._id, req.producer_wallet_id, req.quantity)}
                           className="bg-green-600 hover:bg-green-500 text-white rounded-full p-2"
                           size="icon"
                         >

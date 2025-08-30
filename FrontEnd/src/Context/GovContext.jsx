@@ -26,9 +26,6 @@ const AuthGovProvider = ({ children }) => {
   const userLogoutAsGov = () => {
     localStorage.removeItem("govhydrozen");
     setToken(null);
-    if (token == null) {
-      toast.success("Logout Successfully");
-    }
     setGovernment(""); // Clear the user data on logout
   };
 
