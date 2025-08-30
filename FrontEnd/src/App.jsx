@@ -4,13 +4,15 @@ import { Toaster } from "react-hot-toast"
 import LayOut from "./pages/LayOut"
 import Register from "./Auth/Register";
 import Home from "./pages/Home";
-// import About from "./pages/About";
-// import ProducerDashboard from "./pages/producer/Form";
-import Form from "./pages/producer/Form";
-import BuyerDashboard from "./pages/buyers/Dashboard";
 import AboutUs from "./pages/AboutUs";
+
 import Dashboard from "./pages/producer/Dashboard";
 import History from "./pages/producer/History";
+
+
+import PendingRequests from "./pages/buyers/PendingRequests";
+import ApprovedRequests from "./pages/buyers/ApprovedRequests";
+
 
 function App() {
   return (
@@ -27,7 +29,10 @@ function App() {
         <Route path="/producer/dashboard" element={<Dashboard />} />
         <Route path="/producer/history" element={<History />} />
         <Route path="/producer/form" element={<Form />} />
-        <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
+          
+        <Route path="/producer/dashboard" element={<Form />} />
+        <Route path="/buyer/approved-requests" element={<ApprovedRequests />} />
+        <Route path="/buyer/pending-requests" element={<PendingRequests />} />
       </Routes>
     </>
   );
