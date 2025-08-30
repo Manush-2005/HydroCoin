@@ -14,9 +14,7 @@ export default function LandingPage() {
           powered <br /> by <span className="text-white">Blockchain</span>
         </h1>
         <p className="text-lg text-hydrogen-muted mt-6 max-w-2xl">
-          The state-funded research project "Blockchain-Based Hydrogen Market – BBH2"
-          also known as HydrogenChain, supports the development of an european hydrogen
-          market through the use of blockchain technology.
+          HydroCoin creates a transparent, tokenized hydrogen economy, where every kilogram of green hydrogen is certified and traded on blockchain. Producers, governments, and industries can verify, trade, and incentivize clean hydrogen production seamlessly.
         </p>
         <button className="mt-8 px-6 py-3 bg-hydrogen-neon text-hydrogen-bg rounded-lg font-bold shadow-neon hover:bg-hydrogen-neonSoft transition">
           Learn more

@@ -20,8 +20,8 @@ function Guidance() {
                 {steps.map((step, idx) => (
                     <div key={idx} className="bg-hydrogen-card p-5 rounded-xl border border-hydrogen-neon/40 shadow-[0_0_6px_#39ff14aa] hover:shadow-[0_0_10px_#39ff14cc] transition min-h-[20px]">
                         
-                        <h3 className="font-semibold text-xl mb-2 text-hydrogen-neon">{step.title}</h3>
-                        <p className="text--500 text-left">{step.desc}</p>
+                        <h3 className="font-semibold text-xl mb-2 text-center text-hydrogen-neon">{step.title}</h3>
+                        <p className="text--500 text-center">{step.desc}</p>
                     </div>
                 ))}
             </div>
