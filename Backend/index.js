@@ -16,15 +16,11 @@ import {
   loginGovernment,
   rejectProduction,
 } from "./controller/government.js";
-import {
-  addProduction,
-  getAllApprovedProductionsOfGovernment,
-  getAllProductionsOfGovernment,
-} from "./controller/production.js";
 import { mintTokens } from "./controller/MintToken.js";
 import { addProducer, loginProducer, producer } from "./controller/producer.js";
 import authMiddleware from "./middlewares/auth-middleware.js";
 import authGovMiddleware from "./middlewares/gov-middleware.js";
+import { addTrade } from "./controller/trade.js";
 
 dotenv.config();
 
@@ -72,3 +68,6 @@ app.get("/governments", getAllGovernmentEntities);
 
 // Mint new token route
 app.post("/mint-tokens", mintTokens);
+
+// Trade routes
+app.post("/submit-trade", addTrade);

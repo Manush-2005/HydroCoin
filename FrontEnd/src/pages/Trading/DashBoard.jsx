@@ -5,17 +5,20 @@ import { motion } from "framer-motion";
 import { Currency, Package } from "lucide-react";
 import HydroCoinCandlestickChart from "./HydroCoinCandlestickChart";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { useAuthContext } from "@/Context/AuthContext";
 
 function TradeDashboard() {
     const [showForm, setShowForm] = useState(false);
     const [hydroCoinValue, setHydroCoinValue] = useState(125.75); // ₹125.75 per HC
     const [userHydroCoins, setUserHydroCoins] = useState(300); // user has 300 HC
+    const { producer } = useAuthContext();
 
     // Form inputs
     const [pricePerCoin, setPricePerCoin] = useState("");
     const [coinsToSell, setCoinsToSell] = useState("");
 
-    const handleSell = (e) => {
+    const handleSell = async(e) => {
         e.preventDefault();
         console.log("Selling HydroCoins:", {
             pricePerCoin,
@@ -27,7 +30,21 @@ function TradeDashboard() {
         }
         else if (coinsToSell <= userHydroCoins) {
             setUserHydroCoins(userHydroCoins - coinsToSell);
-            toast.success(`${coinsToSell} HydroCoins listed at ₹${pricePerCoin} each`);
+            try {
+                const res = await axios.post(`http://localhost:8000/submit-trade`, {
+                    producer_wallet_id: producer.walletId,
+                    producer_name: producer.name,
+                    coins_to_sell : coinsToSell,
+                    prize_of_coin : pricePerCoin
+                });
+                console.log(res);
+                toast.success(`${coinsToSell} HydroCoins listed at ₹${pricePerCoin} each`);
+            }
+            catch(err) {
+                console.log(err);
+                toast.error(err.response.data.message);
+            }
+            
             setShowForm(false);
             setPricePerCoin("");
             setCoinsToSell("");
