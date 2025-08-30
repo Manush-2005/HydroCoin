@@ -5,12 +5,16 @@ import LayOut from "./pages/LayOut"
 import Register from "./Auth/Register";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
-import Dashboard from "./pages/producer/History";
-import Form from "./pages/producer/Form";
+
+import Dashboard from "./pages/producer/Dashboard";
+import History from "./pages/producer/History";
+
+
 import PendingRequests from "./pages/buyers/PendingRequests";
 import ApprovedRequests from "./pages/buyers/ApprovedRequests";
 import Login from "./Auth/Login";
 import Logout from "./Auth/Logout";
+
 
 function App() {
   return (
