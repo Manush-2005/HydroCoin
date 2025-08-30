@@ -8,24 +8,24 @@ const locationSchema = new mongoose.Schema({
   lon: {
     type: Number,
     required: true,
-  }
+  },
 });
 
 let producerSchema = new mongoose.Schema({
   email: {
-    type: "string",
+    type: String,
     required: true,
   },
   password: {
-    type: "string",
+    type: String,
     required: true,
   },
   name: {
-    type: "string",
+    type: String,
     required: true,
   },
   address: {
-    type: "string",
+    type: String,
     required: true,
   },
   location: {
@@ -34,8 +34,8 @@ let producerSchema = new mongoose.Schema({
   },
   walletId: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const Producer = mongoose.model("Producer", producerSchema);
