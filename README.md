@@ -25,7 +25,7 @@ This ensures **transparency, traceability, and trust** in hydrogen trading.
 - **Government Benefits** – Eco-friendly producers can claim sustainability incentives.  
 - **Smart Contracts** – Ethereum-based contract ensures transparency & trust.  
 - **Modern UI** – Built with React + Tailwind for a clean, responsive experience.
-  ![Landing Page](C:\Users\dhruv\OneDrive\Desktop\HydroCoin\FrontEnd\public\assets\rd1.png)
+  ![Landing Page](https://github.com/Bhargavimachhi/HydroCoin/blob/227b244820d6380556b1da082ed46684dffa7b4c/rd1.png)
 
 ---
 
