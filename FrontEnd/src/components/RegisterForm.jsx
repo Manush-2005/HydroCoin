@@ -15,6 +15,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { ethers } from "ethers";
+import toast from "react-hot-toast";
 
 export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -80,7 +81,8 @@ export default function RegisterForm() {
       console.log("[register] Success:", data);
       form.reset();
     } catch (error) {
-      console.error("[register]", error);
+      toast.error("User Already exists");
+      console.log(error);
     }
   };
 
