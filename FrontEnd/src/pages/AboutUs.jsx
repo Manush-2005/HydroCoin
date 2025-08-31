@@ -1,4 +1,5 @@
 import React from "react";
+import PurchaseModal from "./Trading/Purchase";
 
 function AboutUs() {
   return (
@@ -13,6 +14,7 @@ function AboutUs() {
           our process ensures trust, transparency, and real-world benefits.
         </p>
       </div>
+     
 
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">

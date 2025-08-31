@@ -21,6 +21,7 @@ import { addProducer, loginProducer, producer } from "./controller/producer.js";
 import authMiddleware from "./middlewares/auth-middleware.js";
 import authGovMiddleware from "./middlewares/gov-middleware.js";
 import { addTrade, getAllTrades } from "./controller/trade.js";
+import { verify,payment } from "./controller/payment.js";
 
 dotenv.config();
 
@@ -72,3 +73,8 @@ app.post("/mint-tokens", mintTokens);
 // Trade routes
 app.post("/submit-trade", addTrade);
 app.get("/trades", getAllTrades);
+
+// payment routes to the marketplace
+
+app.post("/payment", payment);
+app.post("/verify", verify);

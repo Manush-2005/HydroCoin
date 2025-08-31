@@ -1,10 +1,15 @@
 import AboutUs from "./AboutUs";
 import Guidance from "./Guidance";
+import PurchaseModal from "./Trading/Purchase";
 
 // App.jsx
 export default function LandingPage() {
   return (
     <div className="bg-hydrogen-bg text-hydrogen-text min-h-screen font-futuristic">
+
+
+
+
 
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center px-6 py-20">
@@ -18,6 +23,8 @@ export default function LandingPage() {
         <button className="mt-8 px-6 py-3 bg-hydrogen-neon text-hydrogen-bg rounded-lg font-bold shadow-neon hover:bg-hydrogen-neonSoft transition">
           Learn more
         </button>
+
+         {/* <PurchaseModal isOpen={true} onClose={() => {}} coinPrice={100} /> */}
       </section>
 
      <AboutUs/>
