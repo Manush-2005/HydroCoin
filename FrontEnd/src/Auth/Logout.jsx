@@ -8,11 +8,17 @@ const Logout = () => {
   const { userLogout } = useAuthContext();
   const { userLogoutAsGov } = useAuthGovContext();
 
-  useEffect(() => {
+  const handleLogout = () => {
     userLogout(); // Call the logout function
     userLogoutAsGov(); // Call the government logout function
+
     toast.success("Logout successful");
-  }, [userLogout, userLogoutAsGov]);
+    
+  };
+
+  useEffect(() => {
+    handleLogout();
+  }, []);
 
   return <Navigate to="/" />;
 };

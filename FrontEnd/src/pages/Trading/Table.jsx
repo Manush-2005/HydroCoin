@@ -22,6 +22,10 @@ function PurchaseModal({ isOpen, onClose, coinPrice, availableCoins }) {
       setError(`Only ${availableCoins} coins available.`);
       return;
     }
+    if (quantity <= 0) {
+      setError(`Coins to purchase should be greater than 0.`);
+      return;
+    }
     setError("");
     setStep("confirm");
   };

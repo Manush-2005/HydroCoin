@@ -30,6 +30,8 @@ export default function LoginForm() {
   const { storeTokenInLS } = useAuthContext();
   const { storeTokenGovInLS } = useAuthGovContext();
   const navigate = useNavigate();
+  const { userLogout } = useAuthContext();
+  const { userLogoutAsGov } = useAuthGovContext();
   console.log(loginType);
 
   const form = useForm({
@@ -39,6 +41,8 @@ export default function LoginForm() {
 
   const onSubmit = async (values) => {
     try {
+      userLogout();
+      userLogoutAsGov();
       const endpoint =
         loginType === "producer"
           ? "http://localhost:8000/login/producer"
